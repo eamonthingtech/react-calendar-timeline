@@ -102,6 +102,7 @@ export default class ReactCalendarTimeline extends Component {
 
     traditionalZoom: PropTypes.bool,
     showCursorLine: PropTypes.bool,
+    changeCursorTime: PropTypes.func,
 
     itemTouchSendsClick: PropTypes.bool,
 
@@ -227,6 +228,7 @@ export default class ReactCalendarTimeline extends Component {
 
     traditionalZoom: false,
     showCursorLine: false,
+    changeCursorTime: null,
 
     onItemMove: null,
     onItemResize: null,
@@ -804,7 +806,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   handleCanvasMouseMove = (e) => {
-    const { showCursorLine } = this.props
+    const { showCursorLine, changeCursorTime } = this.props
     const { canvasTimeStart, width, visibleTimeStart, visibleTimeEnd, cursorTime } = this.state
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
@@ -823,6 +825,9 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     if (cursorTime !== timePosition && showCursorLine) {
+      if (changeCursorTime) {
+        changeCursorTime(timePosition)
+      }
       this.setState({cursorTime: timePosition, mouseOverCanvas: true})
     }
   }
